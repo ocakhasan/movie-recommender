@@ -17,7 +17,7 @@ tf_idf_mat = vectorizer.fit_transform(df['overview'])
 
 cosine_sim = linear_kernel(tf_idf_mat, tf_idf_mat)
 
-titles = pd.Series(df.index, index=df['title']).drop_duplicates()
+titles = pd.Series(df.index, index=df['lower_name']).drop_duplicates()
 
 print(titles)
 
@@ -50,7 +50,7 @@ def hello():
                 'overviews': []}
     
     if request.method=="POST":
-        text = request.form['fname']
+        text = request.form['fname'].lower()
         try:
             recommended_df = get_recommendations(text)
             context['movies'] = recommended_df.title.values
