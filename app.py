@@ -1,27 +1,30 @@
 from flask import Flask, render_template, request, redirect, flash, url_for
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
-app = Flask(__name__)
-
 import pandas as pd
 import pickle
 
-df = pd.read_csv("data.csv")
+app = Flask(__name__)
 
-df['overview'] = df['overview'].fillna('')
-
-vectorizer = TfidfVectorizer(stop_words="english")
+def get_cosine_similarities():
 
 
-tf_idf_mat = vectorizer.fit_transform(df['overview'])
+    df = pd.read_csv("data.csv")
 
-cosine_sim = linear_kernel(tf_idf_mat, tf_idf_mat)
+    df['overview'] = df['overview'].fillna('')
+
+    vectorizer = TfidfVectorizer(stop_words="english")
+
+
+    tf_idf_mat = vectorizer.fit_transform(df['overview'])
+
+    cosine_sim = linear_kernel(tf_idf_mat, tf_idf_mat)
+
+    return cosine_sim
 
 titles = pd.Series(df.index, index=df['lower_name']).drop_duplicates()
 
-print(titles)
-
-
+cosine_sim = get_cosine_similarities()
 
 def get_recommendations(movie_title, cosine_similarity = cosine_sim):
     index_movie = titles[movie_title]
