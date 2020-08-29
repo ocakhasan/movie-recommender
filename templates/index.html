@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommend Me a Movie</title>
+    <link rel="shortcut icon" href="{{url_for('static', filename='cinema.svg')}}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <style>
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+    </style>
+
+    <div class="container mt-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="{{url_for('static', filename='cinema.svg')}}" width="30" height="30"
+                    class="d-inline-block align-top" alt="" loading="lazy">
+                Movie Recommender
+            </a>
+        </nav>
+
+
+        <form action="/" method="POST">
+            <div class="input-group mb-3 mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                </div>
+                <input type="text" class="form-control" placeholder="Movie" aria-label="movie_name"
+                    aria-describedby="basic-addon1" name="fname" id="fname">
+                <input type="submit" value="Submit" class="btn btn-outline-primary">
+            </div>
+        </form>
+
+
+        {% if length %}
+        <p>Recommendations for <strong>{{movie_name}}</strong> </p>
+        <ul class="list-group list-group-flush">
+            {% for i in range(length) %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <a href={{context.urls[i]}} target="_blank">
+                        <h4>{{context.movies[i]}}</h4>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p>{{context.overviews[i]}}</p>
+                    </blockquote>
+                    <p class="card-text"><strong>Runtime :</strong> {{context.runtimes[i]}} minutes</p>
+                    <p class="card-text"><strong>Release Date :</strong> {{context.release_dates[i]}}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
+
+        {% endif%}
+
+        {% if error %}
+        <h4>Could not find the movie. Please check the input, if necessary write the whole name of movie and try again.</h4>
+        {% endif %}
+        <p>Icons made by <a href="https://www.flaticon.com/authors/smalllikeart" title="smalllikeart">smalllikeart</a>
+            from
+            <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a></p>
+
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+
+
+
+
+</body>
+
+</html>
