@@ -6,15 +6,12 @@ import pickle
 
 app = Flask(__name__)
 
+df = pd.read_csv("data.csv")
+df['overview'] = df['overview'].fillna('')
+
 def get_cosine_similarities():
-
-
-    df = pd.read_csv("data.csv")
-
-    df['overview'] = df['overview'].fillna('')
-
+    
     vectorizer = TfidfVectorizer(stop_words="english")
-
 
     tf_idf_mat = vectorizer.fit_transform(df['overview'])
 
@@ -28,6 +25,8 @@ cosine_sim = get_cosine_similarities()
 
 def get_recommendations(movie_title, cosine_similarity = cosine_sim):
     index_movie = titles[movie_title]
+
+    name_of_movie = df.iloc[index_movie]['title']
     
     similarities = cosine_similarity[index_movie]
     
@@ -39,13 +38,13 @@ def get_recommendations(movie_title, cosine_similarity = cosine_sim):
     
     similar_indexes = [x[0] for x in similarity_scores]
     
-    return df.iloc[similar_indexes]
+    return df.iloc[similar_indexes], name_of_movie
 
 
 @app.route('/', methods=['GET', 'POST'])
 def hello():
     length = 0
-    text=""
+    movie_name=""
     context = {'movies': [],
                 'urls' : [],
                 'release_dates': [],
@@ -55,7 +54,7 @@ def hello():
     if request.method=="POST":
         text = request.form['fname'].lower()
         try:
-            recommended_df = get_recommendations(text)
+            recommended_df, movie_name = get_recommendations(text)
             context['movies'] = recommended_df.title.values
             context['urls'] = recommended_df.homepage.values
             context['release_dates'] = recommended_df.release_date.values
@@ -67,7 +66,7 @@ def hello():
         except:
             return render_template('index.html', error=True)
     
-    return render_template('index.html', length=length, context=context, movie_name=text, error=False)
+    return render_template('index.html', length=length, context=context, movie_name=movie_name, error=False)
 
 if __name__ == '__main__':
     app.run()
