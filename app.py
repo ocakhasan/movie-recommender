@@ -9,8 +9,8 @@ app = Flask(__name__)
 df = pd.read_csv("data.csv")
 df['overview'] = df['overview'].fillna('')
 
-def get_cosine_similarities():
-    
+def get_cosine_similarities(df):
+
     vectorizer = TfidfVectorizer(stop_words="english")
 
     tf_idf_mat = vectorizer.fit_transform(df['overview'])
@@ -21,7 +21,7 @@ def get_cosine_similarities():
 
 titles = pd.Series(df.index, index=df['lower_name']).drop_duplicates()
 
-cosine_sim = get_cosine_similarities()
+cosine_sim = get_cosine_similarities(df)
 
 def get_recommendations(movie_title, cosine_similarity = cosine_sim):
     index_movie = titles[movie_title]
