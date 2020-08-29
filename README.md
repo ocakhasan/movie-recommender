@@ -5,11 +5,7 @@ This simple recommendation uses the dataset from the [TMDB 500 Movie Dataset](ht
 
 ## How it works
 
-To make it work first you need to run the `main.py` file to create `cosine.pickle` file.
-
-This operation will create `cosine.pickle` file which we basically use for the similarities of text.
-
-After that, you need to run these commands
+You need to run these commands
 ```
 set FLASK_APP=app (Windows)
 export FLASK_APP=app (Linux, MacOS)
